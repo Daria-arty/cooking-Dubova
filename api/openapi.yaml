@@ -1,0 +1,131 @@
+openapi: 3.0.3
+info:
+  title: Cooking Studio Client API
+  description: MVP контракт клиентского приложения «Кулинарная студия». Идентификация клиента — по номеру телефона в теле запроса.
+  version: 1.0.0
+
+servers:
+  - url: https://api.chef-table.example/v1
+    description: Production
+  - url: http://localhost:3000/v1
+    description: Local mock
+
+paths:
+  /bookings:
+    post:
+      operationId: createBooking
+      summary: Создать бронь на кулинарный класс
+      description: |
+        Атомарно резервирует одно место на слоте для клиента с указанным номером телефона.
+        Идентификация клиента — поле `phone` в теле запроса (без токенов и заголовков авторизации).
+      tags:
+        - Bookings
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateBookingRequest'
+            examples:
+              ownEquipment:
+                summary: Своя экипировка
+                value:
+                  slotId: slot_20260710_1800_pasta
+                  phone: "+79001234567"
+                  equipmentOptions:
+                    type: own
+                  allergies: ""
+              rentalEquipment:
+                summary: Прокат экипировки
+                value:
+                  slotId: slot_20260710_1800_pasta
+                  phone: "+79001234567"
+                  equipmentOptions:
+                    type: rental
+                  allergies: "Орехи, лактоза"
+      responses:
+        '201':
+          description: Бронь успешно создана
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateBookingResponse'
+              example:
+                bookingId: bk_8f3a2c1
+                status: confirmed
+        '409':
+          description: Конфликт — слот занят или клиент уже записан на этот слот
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                error: Slot already booked
+        '410':
+          description: Слот недоступен для записи (отменён студией, снят с публикации и т.п.)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                error: Slot is no longer available
+
+components:
+  schemas:
+    CreateBookingRequest:
+      type: object
+      required:
+        - slotId
+        - phone
+        - equipmentOptions
+      properties:
+        slotId:
+          type: string
+          description: Идентификатор слота расписания
+          example: slot_20260710_1800_pasta
+        phone:
+          type: string
+          description: Номер телефона клиента (идентификация)
+          example: "+79001234567"
+        equipmentOptions:
+          type: object
+          required:
+            - type
+          properties:
+            type:
+              type: string
+              enum:
+                - own
+                - rental
+              description: own — своя экипировка; rental — прокат (фартук и ножи)
+          example:
+            type: rental
+        allergies:
+          type: string
+          description: Аллергии и диетические ограничения (необязательно)
+          example: "Орехи, лактоза"
+
+    CreateBookingResponse:
+      type: object
+      required:
+        - bookingId
+        - status
+      properties:
+        bookingId:
+          type: string
+          example: bk_8f3a2c1
+        status:
+          type: string
+          enum:
+            - confirmed
+          description: Статус созданной брони
+          example: confirmed
+
+    ErrorResponse:
+      type: object
+      required:
+        - error
+      properties:
+        error:
+          type: string
+          example: Slot already booked

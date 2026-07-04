@@ -1,0 +1,1790 @@
+<!DOCTYPE html>
+
+<html lang="ru">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Кулинарная студия — Расписание</title>
+
+  <style>
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+
+      --color-primary: #b85c38;
+
+      --color-primary-hover: #9c4a2c;
+
+      --color-accent: #6b7d3a;
+
+      --color-success: #5a8a3a;
+
+      --color-error: #c0392b;
+
+      --color-text: #3a2e24;
+
+      --color-text-light: #7a6a5a;
+
+      --color-bg: #faf6f0;
+
+      --color-bg-alt: #f2ebe0;
+
+      --color-card: #ffffff;
+
+      --color-border: #e8dcc8;
+
+      --spacing-xs: 0.5rem;
+
+      --spacing-sm: 1rem;
+
+      --spacing-md: 1.5rem;
+
+      --spacing-lg: 2rem;
+
+      --font-size-sm: 0.875rem;
+
+      --font-size-base: 1rem;
+
+      --font-size-lg: 1.125rem;
+
+      --font-size-xl: 1.5rem;
+
+      --border-radius: 12px;
+
+      --border-radius-sm: 8px;
+
+      --min-tap-size: 44px;
+
+      --shadow-soft: 0 2px 8px rgba(90, 60, 30, 0.06);
+
+      --shadow-hover: 0 10px 28px rgba(90, 60, 30, 0.14);
+
+    }
+
+    body {
+
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+
+      font-size: var(--font-size-base);
+
+      line-height: 1.5;
+
+      color: var(--color-text);
+
+      background-color: var(--color-bg);
+
+      min-height: 100vh;
+
+    }
+
+    .header {
+
+      background-color: var(--color-card);
+
+      border-bottom: 1px solid var(--color-border);
+
+      padding: var(--spacing-md);
+
+      position: sticky;
+
+      top: 0;
+
+      z-index: 10;
+
+      box-shadow: var(--shadow-soft);
+
+    }
+
+    .header__title {
+
+      font-size: var(--font-size-xl);
+
+      font-weight: 600;
+
+      text-align: center;
+
+    }
+
+    .header__subtitle {
+
+      text-align: center;
+
+      font-size: var(--font-size-sm);
+
+      color: var(--color-text-light);
+
+      margin-top: 2px;
+
+    }
+
+    .main {
+
+      padding: var(--spacing-md);
+
+      max-width: 600px;
+
+      margin: 0 auto;
+
+    }
+
+    .tabs {
+
+      display: flex;
+
+      gap: var(--spacing-xs);
+
+      background-color: var(--color-bg-alt);
+
+      padding: 6px;
+
+      border-radius: var(--border-radius);
+
+      margin-bottom: var(--spacing-md);
+
+    }
+
+    .tabs__btn {
+
+      flex: 1;
+
+      padding: 12px var(--spacing-sm);
+
+      border: none;
+
+      border-radius: var(--border-radius-sm);
+
+      background-color: transparent;
+
+      color: var(--color-text-light);
+
+      font-size: var(--font-size-base);
+
+      font-weight: 500;
+
+      cursor: pointer;
+
+      min-height: var(--min-tap-size);
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content: center;
+
+      gap: 6px;
+
+    }
+
+    .tabs__btn--active {
+
+      background-color: var(--color-card);
+
+      color: var(--color-primary);
+
+      font-weight: 600;
+
+      box-shadow: var(--shadow-soft);
+
+    }
+
+    .tabs__badge {
+
+      display: inline-flex;
+
+      align-items: center;
+
+      justify-content: center;
+
+      min-width: 22px;
+
+      height: 22px;
+
+      padding: 0 6px;
+
+      border-radius: 11px;
+
+      background-color: var(--color-primary);
+
+      color: white;
+
+      font-size: 0.75rem;
+
+      font-weight: 600;
+
+    }
+
+    .section-header {
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content: space-between;
+
+      flex-wrap: wrap;
+
+      gap: var(--spacing-xs);
+
+      margin-bottom: var(--spacing-md);
+
+    }
+
+    .schedule__title {
+
+      font-size: var(--font-size-lg);
+
+      font-weight: 600;
+
+    }
+
+    .loyalty-badge {
+
+      display: inline-flex;
+
+      align-items: center;
+
+      gap: 6px;
+
+      padding: 6px 12px;
+
+      background: linear-gradient(135deg, #d4a017 0%, #b8860b 100%);
+
+      color: #fff;
+
+      font-size: var(--font-size-sm);
+
+      font-weight: 600;
+
+      border-radius: 20px;
+
+    }
+
+    .schedule__container {
+
+      display: flex;
+
+      flex-direction: column;
+
+      gap: var(--spacing-sm);
+
+    }
+
+    .loader {
+
+      display: flex;
+
+      justify-content: center;
+
+      padding: var(--spacing-lg);
+
+    }
+
+    .loader__spinner {
+
+      width: 40px;
+
+      height: 40px;
+
+      border: 4px solid var(--color-border);
+
+      border-top-color: var(--color-primary);
+
+      border-radius: 50%;
+
+      animation: spin 1s linear infinite;
+
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .empty-state {
+
+      text-align: center;
+
+      padding: var(--spacing-lg) var(--spacing-md);
+
+      color: var(--color-text-light);
+
+      background-color: var(--color-card);
+
+      border-radius: var(--border-radius);
+
+      border: 1px dashed var(--color-border);
+
+    }
+
+    .empty-state__icon { font-size: 2.5rem; margin-bottom: var(--spacing-xs); opacity: 0.6; }
+
+    .slot-card {
+
+      background-color: var(--color-card);
+
+      border: 1px solid var(--color-border);
+
+      border-radius: var(--border-radius);
+
+      overflow: hidden;
+
+      cursor: pointer;
+
+      box-shadow: var(--shadow-soft);
+
+      transition: transform 0.2s, box-shadow 0.25s;
+
+    }
+
+    .slot-card:hover {
+
+      transform: translateY(-2px);
+
+      box-shadow: var(--shadow-hover);
+
+    }
+
+    .slot-card__image {
+
+      width: 100%;
+
+      height: 200px;
+
+      object-fit: cover;
+
+      display: block;
+
+      background-color: #f0f0f0;
+
+    }
+
+    .slot-card__body { padding: var(--spacing-md); }
+
+    .slot-card__header {
+
+      display: flex;
+
+      justify-content: space-between;
+
+      align-items: flex-start;
+
+      margin-bottom: var(--spacing-xs);
+
+      gap: var(--spacing-sm);
+
+    }
+
+    .slot-card__title {
+
+      font-size: var(--font-size-lg);
+
+      font-weight: 600;
+
+      flex: 1;
+
+    }
+
+    .slot-card__date {
+
+      font-size: var(--font-size-sm);
+
+      color: var(--color-primary);
+
+      font-weight: 600;
+
+      white-space: nowrap;
+
+      background-color: rgba(184, 92, 56, 0.08);
+
+      padding: 4px 10px;
+
+      border-radius: 20px;
+
+    }
+
+    .slot-card__time { margin-bottom: var(--spacing-xs); }
+
+    .slot-card__location { font-size: var(--font-size-sm); color: var(--color-text-light); }
+
+    .booking-card {
+
+      background-color: var(--color-card);
+
+      border: 1px solid var(--color-border);
+
+      border-radius: var(--border-radius);
+
+      padding: var(--spacing-md);
+
+      box-shadow: var(--shadow-soft);
+
+      margin-bottom: var(--spacing-sm);
+
+    }
+
+    .booking-card__header {
+
+      display: flex;
+
+      justify-content: space-between;
+
+      align-items: flex-start;
+
+      gap: var(--spacing-sm);
+
+      margin-bottom: var(--spacing-xs);
+
+    }
+
+    .booking-card__title {
+
+      font-size: var(--font-size-lg);
+
+      font-weight: 600;
+
+      flex: 1;
+
+    }
+
+    .booking-card__status {
+
+      display: inline-flex;
+
+      align-items: center;
+
+      gap: 4px;
+
+      padding: 4px 10px;
+
+      background-color: rgba(107, 125, 58, 0.12);
+
+      color: var(--color-accent);
+
+      font-size: var(--font-size-sm);
+
+      font-weight: 600;
+
+      border-radius: 20px;
+
+    }
+
+    .booking-card__status::before {
+
+      content: '';
+
+      width: 6px;
+
+      height: 6px;
+
+      border-radius: 50%;
+
+      background-color: var(--color-accent);
+
+    }
+
+    .booking-card__info {
+
+      display: flex;
+
+      flex-direction: column;
+
+      gap: 4px;
+
+      margin: var(--spacing-sm) 0;
+
+      font-size: var(--font-size-sm);
+
+      color: var(--color-text-light);
+
+    }
+
+    .booking-card__booking-id {
+
+      font-family: 'Courier New', monospace;
+
+      font-size: var(--font-size-sm);
+
+      color: var(--color-primary);
+
+      background-color: rgba(184, 92, 56, 0.08);
+
+      padding: 3px 8px;
+
+      border-radius: 6px;
+
+      display: inline-block;
+
+      margin-top: var(--spacing-xs);
+
+    }
+
+    .booking-card__actions {
+
+      margin-top: var(--spacing-sm);
+
+      padding-top: var(--spacing-sm);
+
+      border-top: 1px solid var(--color-border);
+
+    }
+
+    .btn--cancel {
+
+      width: 100%;
+
+      padding: 12px;
+
+      border: 1px solid var(--color-error);
+
+      background-color: transparent;
+
+      color: var(--color-error);
+
+      border-radius: var(--border-radius-sm);
+
+      font-size: var(--font-size-base);
+
+      font-weight: 500;
+
+      cursor: pointer;
+
+      min-height: var(--min-tap-size);
+
+    }
+
+    .btn--cancel:hover { background-color: var(--color-error); color: white; }
+
+    .modal-overlay {
+
+      position: fixed;
+
+      inset: 0;
+
+      background-color: rgba(58, 46, 36, 0.55);
+
+      display: flex;
+
+      justify-content: center;
+
+      align-items: center;
+
+      z-index: 100;
+
+      padding: var(--spacing-md);
+
+    }
+
+    .modal {
+
+      background-color: var(--color-card);
+
+      border-radius: var(--border-radius);
+
+      max-width: 500px;
+
+      width: 100%;
+
+      max-height: 90vh;
+
+      overflow-y: auto;
+
+    }
+
+    .modal__header {
+
+      display: flex;
+
+      justify-content: space-between;
+
+      align-items: center;
+
+      padding: var(--spacing-md);
+
+      border-bottom: 1px solid var(--color-border);
+
+    }
+
+    .modal__title { font-size: var(--font-size-lg); font-weight: 600; }
+
+    .modal__close {
+
+      background: none;
+
+      border: none;
+
+      font-size: 1.5rem;
+
+      cursor: pointer;
+
+      color: var(--color-text-light);
+
+      width: var(--min-tap-size);
+
+      height: var(--min-tap-size);
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content: center;
+
+    }
+
+    .modal__body { padding: var(--spacing-md); }
+
+    .modal__info {
+
+      background-color: var(--color-bg-alt);
+
+      padding: var(--spacing-sm);
+
+      border-radius: var(--border-radius-sm);
+
+      margin-bottom: var(--spacing-md);
+
+    }
+
+    .modal__info-item {
+
+      display: flex;
+
+      justify-content: space-between;
+
+      margin-bottom: var(--spacing-xs);
+
+      gap: var(--spacing-sm);
+
+    }
+
+    .modal__info-item:last-child { margin-bottom: 0; }
+
+    .modal__info-label { font-weight: 500; color: var(--color-text-light); }
+
+    .modal__info-value { text-align: right; }
+
+    .form { display: flex; flex-direction: column; gap: var(--spacing-md); }
+
+    .form__group { display: flex; flex-direction: column; gap: var(--spacing-xs); }
+
+    .form__label { font-weight: 500; }
+
+    .form__label--required::after { content: ' *'; color: var(--color-error); }
+
+    .form__input {
+
+      padding: var(--spacing-sm);
+
+      border: 1px solid var(--color-border);
+
+      border-radius: var(--border-radius-sm);
+
+      font-size: var(--font-size-base);
+
+      min-height: var(--min-tap-size);
+
+      background-color: var(--color-card);
+
+    }
+
+    .form__input:focus { outline: none; border-color: var(--color-primary); }
+
+    .form__input--error { border-color: var(--color-error); }
+
+    .form__textarea {
+
+      padding: var(--spacing-sm);
+
+      border: 1px solid var(--color-border);
+
+      border-radius: var(--border-radius-sm);
+
+      font-size: var(--font-size-base);
+
+      min-height: 80px;
+
+      resize: vertical;
+
+      font-family: inherit;
+
+    }
+
+    .form__textarea:focus { outline: none; border-color: var(--color-primary); }
+
+    .form__checkbox-group { display: flex; flex-direction: column; gap: var(--spacing-xs); }
+
+    .form__checkbox-label {
+
+      display: flex;
+
+      align-items: center;
+
+      gap: var(--spacing-xs);
+
+      cursor: pointer;
+
+      min-height: var(--min-tap-size);
+
+    }
+
+    .form__checkbox { width: 20px; height: 20px; cursor: pointer; accent-color: var(--color-primary); }
+
+    .form__error { color: var(--color-error); font-size: var(--font-size-sm); }
+
+    .btn {
+
+      padding: var(--spacing-sm) var(--spacing-md);
+
+      border: none;
+
+      border-radius: var(--border-radius-sm);
+
+      font-size: var(--font-size-base);
+
+      font-weight: 500;
+
+      cursor: pointer;
+
+      min-height: var(--min-tap-size);
+
+    }
+
+    .btn--primary { background-color: var(--color-primary); color: white; }
+
+    .btn--primary:hover:not(:disabled) { background-color: var(--color-primary-hover); }
+
+    .btn--primary:disabled { opacity: 0.6; cursor: not-allowed; }
+
+    .btn--secondary {
+
+      background-color: var(--color-bg-alt);
+
+      color: var(--color-text);
+
+      border: 1px solid var(--color-border);
+
+    }
+
+    .modal__footer {
+
+      display: flex;
+
+      gap: var(--spacing-sm);
+
+      padding: var(--spacing-md);
+
+      border-top: 1px solid var(--color-border);
+
+    }
+
+    .modal__footer .btn { flex: 1; }
+
+    .message {
+
+      padding: var(--spacing-sm);
+
+      border-radius: var(--border-radius-sm);
+
+      margin-bottom: var(--spacing-md);
+
+      font-size: var(--font-size-sm);
+
+    }
+
+    .message--success { background-color: #e8f0dc; color: #3d5a1e; border: 1px solid var(--color-success); }
+
+    .message--error { background-color: #fbe3df; color: #7a1f15; border: 1px solid var(--color-error); }
+
+    .tab-content { display: none; }
+
+    .tab-content--active { display: block; }
+
+    @media (max-width: 480px) {
+
+      .main { padding: var(--spacing-sm); }
+
+      .modal { max-height: 95vh; }
+
+      .modal__footer { flex-direction: column; }
+
+      .slot-card__image { height: 180px; }
+
+    }
+
+  </style>
+
+</head>
+
+<body>
+
+  <div id="app">
+
+    <header class="header">
+
+      <h1 class="header__title">Кулинарная студия</h1>
+
+      <p class="header__subtitle">Гастрономические мастер-классы</p>
+
+    </header>
+
+    <main class="main">
+
+      <div class="tabs">
+
+        <button class="tabs__btn tabs__btn--active" data-tab="catalog">🍽 Каталог</button>
+
+        <button class="tabs__btn" data-tab="my-bookings">
+
+          📋 Мои записи
+
+          <span class="tabs__badge" id="bookings-count" style="display: none;">0</span>
+
+        </button>
+
+      </div>
+
+      <section class="tab-content tab-content--active" id="tab-catalog">
+
+        <div class="section-header">
+
+          <h2 class="schedule__title">Расписание мастер-классов</h2>
+
+        </div>
+
+        <div id="schedule-container" class="schedule__container"></div>
+
+      </section>
+
+      <section class="tab-content" id="tab-my-bookings">
+
+        <div class="section-header">
+
+          <h2 class="schedule__title">Мои записи</h2>
+
+          <div id="loyalty-badge-container"></div>
+
+        </div>
+
+        <div id="my-bookings-container"></div>
+
+      </section>
+
+    </main>
+
+  </div>
+
+  <div id="modal-root"></div>
+
+  <script>
+
+    const SafeStorage = (() => {
+
+      let memoryStore = {};
+
+      let useLocalStorage = false;
+
+      try {
+
+        const testKey = '__storage_test__';
+
+        window.localStorage.setItem(testKey, '1');
+
+        window.localStorage.removeItem(testKey);
+
+        useLocalStorage = true;
+
+      } catch (e) {
+
+        useLocalStorage = false;
+
+        console.warn('localStorage недоступен, используется in-memory хранилище');
+
+      }
+
+      return {
+
+        getItem(key) {
+
+          try { if (useLocalStorage) return window.localStorage.getItem(key); } catch (e) {}
+
+          return memoryStore[key] !== undefined ? memoryStore[key] : null;
+
+        },
+
+        setItem(key, value) {
+
+          try { if (useLocalStorage) { window.localStorage.setItem(key, value); return; } } catch (e) {}
+
+          memoryStore[key] = value;
+
+        },
+
+        removeItem(key) {
+
+          try { if (useLocalStorage) { window.localStorage.removeItem(key); return; } } catch (e) {}
+
+          delete memoryStore[key];
+
+        }
+
+      };
+
+    })();
+
+    const mockSlots = [
+
+      {
+
+        id: 'slot-001',
+
+        date: '15.07.2026',
+
+        time: '18:00',
+
+        title: 'Итальянская кухня для новичков',
+
+        location: 'Москва, ул. Тверская, 15',
+
+        image: '[https://image.qwenlm.ai/public_source/21623d8d-307c-4664-9cd1-8dcbfa824bb6/1b229d506-c28e-4c75-98ea-b9dcf9f35e2a.png](https://image.qwenlm.ai/public_source/21623d8d-307c-4664-9cd1-8dcbfa824bb6/1b229d506-c28e-4c75-98ea-b9dcf9f35e2a.png)'
+
+      },
+
+      {
+
+        id: 'slot-002',
+
+        date: '17.07.2026',
+
+        time: '19:00',
+
+        title: 'Азиатская кухня: суши и роллы',
+
+        location: 'Москва, ул. Арбат, 22',
+
+        image: '[https://image.qwenlm.ai/public_source/21623d8d-307c-4664-9cd1-8dcbfa824bb6/13c7577c9-49eb-4cae-b2da-a003e7b47459.png](https://image.qwenlm.ai/public_source/21623d8d-307c-4664-9cd1-8dcbfa824bb6/13c7577c9-49eb-4cae-b2da-a003e7b47459.png)'
+
+      },
+
+      {
+
+        id: 'slot-003',
+
+        date: '20.07.2026',
+
+        time: '17:00',
+
+        title: 'Французские десерты',
+
+        location: 'Москва, Ленинский пр-т, 8',
+
+        image: '[https://image.qwenlm.ai/public_source/21623d8d-307c-4664-9cd1-8dcbfa824bb6/1ea52f171-befb-4f50-b187-9641b86d3dc6.png](https://image.qwenlm.ai/public_source/21623d8d-307c-4664-9cd1-8dcbfa824bb6/1ea52f171-befb-4f50-b187-9641b86d3dc6.png)'
+
+      },
+
+      {
+
+        id: 'slot-004',
+
+        date: '22.07.2026',
+
+        time: '18:30',
+
+        title: 'Грузинская кухня: хинкали и хачапури',
+
+        location: 'Москва, ул. Покровка, 5',
+
+        image: '[https://image.qwenlm.ai/public_source/21623d8d-307c-4664-9cd1-8dcbfa824bb6/13fe29829-1e6e-47ed-8567-b24d5e7b1c78.png](https://image.qwenlm.ai/public_source/21623d8d-307c-4664-9cd1-8dcbfa824bb6/13fe29829-1e6e-47ed-8567-b24d5e7b1c78.png)'
+
+      },
+
+      {
+
+        id: 'slot-005',
+
+        date: '25.07.2026',
+
+        time: '16:00',
+
+        title: 'Здоровое питание: вегетарианские блюда',
+
+        location: 'Москва, ул. Мясницкая, 30',
+
+        image: '[https://image.qwenlm.ai/public_source/21623d8d-307c-4664-9cd1-8dcbfa824bb6/1fa0c2e36-9280-4ca8-bc61-41794222314d.png](https://image.qwenlm.ai/public_source/21623d8d-307c-4664-9cd1-8dcbfa824bb6/1fa0c2e36-9280-4ca8-bc61-41794222314d.png)'
+
+      }
+
+    ];
+
+    function getSlots() {
+
+      return new Promise((resolve) => {
+
+        setTimeout(() => resolve(mockSlots), 800);
+
+      });
+
+    }
+
+    function createBooking(formData, simulateNetworkError = false) {
+
+      return new Promise((resolve, reject) => {
+
+        setTimeout(() => {
+
+          if (simulateNetworkError) {
+
+            reject(new Error('Ошибка сети. Проверьте подключение к интернету.'));
+
+            return;
+
+          }
+
+          if ([formData.name](http://formData.name) === 'Тест 409') {
+
+            reject({ status: 409, message: 'Вы уже записаны на это занятие' });
+
+            return;
+
+          }
+
+          if ([formData.name](http://formData.name) === 'Тест 410') {
+
+            reject({ status: 410, message: 'Место на мастер-классе закончилось' });
+
+            return;
+
+          }
+
+          const bookingId = 'BKK-' + Math.floor(1000 + Math.random() * 9000);
+
+          resolve({ status: 201, data: { bookingId } });
+
+        }, 1000);
+
+      });
+
+    }
+
+    let currentSlots = [];
+
+    let isModalOpen = false;
+
+    let selectedSlot = null;
+
+    const scheduleContainer = document.getElementById('schedule-container');
+
+    const modalRoot = document.getElementById('modal-root');
+
+    const myBookingsContainer = document.getElementById('my-bookings-container');
+
+    const tabCatalog = document.getElementById('tab-catalog');
+
+    const tabMyBookings = document.getElementById('tab-my-bookings');
+
+    const bookingsCountBadge = document.getElementById('bookings-count');
+
+    const loyaltyBadgeContainer = document.getElementById('loyalty-badge-container');
+
+    const BOOKINGS_STORAGE_KEY = 'bookings';
+
+    function getBookings() {
+
+      try {
+
+        const raw = SafeStorage.getItem(BOOKINGS_STORAGE_KEY);
+
+        if (!raw) return [];
+
+        const parsed = JSON.parse(raw);
+
+        return Array.isArray(parsed) ? parsed : [];
+
+      } catch (e) { return []; }
+
+    }
+
+    function saveBookingToStorage(booking) {
+
+      const bookings = getBookings();
+
+      bookings.unshift(booking);
+
+      SafeStorage.setItem(BOOKINGS_STORAGE_KEY, JSON.stringify(bookings));
+
+      updateBookingsUI();
+
+    }
+
+    window.cancelBooking = function(bookingId) {
+
+      if (!bookingId) return;
+
+      if (!confirm('Вы уверены, что хотите отменить бронь?')) return;
+
+      const bookings = getBookings().filter(b => b.bookingId !== bookingId);
+
+      SafeStorage.setItem(BOOKINGS_STORAGE_KEY, JSON.stringify(bookings));
+
+      updateBookingsUI();
+
+    };
+
+    function updateBookingsUI() {
+
+      const bookings = getBookings();
+
+      renderMyBookings(bookings);
+
+      updateBookingsCountBadge(bookings.length);
+
+      updateLoyaltyBadge(bookings.length);
+
+    }
+
+    function updateBookingsCountBadge(count) {
+
+      if (count > 0) {
+
+        bookingsCountBadge.textContent = count;
+
+        [bookingsCountBadge.style](http://bookingsCountBadge.style).display = 'inline-flex';
+
+      } else {
+
+        [bookingsCountBadge.style](http://bookingsCountBadge.style).display = 'none';
+
+      }
+
+    }
+
+    function updateLoyaltyBadge(count) {
+
+      if (count > 3) {
+
+        loyaltyBadgeContainer.innerHTML = `
+
+          <span class="loyalty-badge" title="Более 3 записей — вы наш постоянный гость!">
+
+            ⭐ Постоянный гость
+
+          </span>
+
+        `;
+
+      } else {
+
+        loyaltyBadgeContainer.innerHTML = '';
+
+      }
+
+    }
+
+    function escapeHtml(str) {
+
+      if (str == null) return '';
+
+      return String(str)
+
+        .replace(/&/g, '&amp;')
+
+        .replace(/</g, '&lt;')
+
+        .replace(/>/g, '&gt;')
+
+        .replace(/"/g, '&quot;')
+
+        .replace(/'/g, '&#039;');
+
+    }
+
+    function renderMyBookings(bookings) {
+
+      if (!bookings || bookings.length === 0) {
+
+        myBookingsContainer.innerHTML = `
+
+          <div class="empty-state">
+
+            <div class="empty-state__icon">📭</div>
+
+            <p>У вас пока нет записей</p>
+
+          </div>
+
+        `;
+
+        return;
+
+      }
+
+      myBookingsContainer.innerHTML = [bookings.map](http://bookings.map)(b => `
+
+        <article class="booking-card">
+
+          <div class="booking-card__header">
+
+            <h3 class="booking-card__title">${escapeHtml(b.title)}</h3>
+
+            <span class="booking-card__status">Активна</span>
+
+          </div>
+
+          <div class="booking-card__info">
+
+            <div>📅 ${escapeHtml([b.date](http://b.date))} в ${escapeHtml(b.time)}</div>
+
+            <div>📍 ${escapeHtml(b.location)}</div>
+
+          </div>
+
+          <div class="booking-card__booking-id">Бронь: ${escapeHtml(b.bookingId)}</div>
+
+          <div class="booking-card__actions">
+
+            <button class="btn--cancel" onclick="cancelBooking('${escapeHtml(b.bookingId)}')">
+
+              Отменить бронь
+
+            </button>
+
+          </div>
+
+        </article>
+
+      `).join('');
+
+    }
+
+    function initTabs() {
+
+      document.querySelectorAll('.tabs__btn').forEach(btn => {
+
+        btn.addEventListener('click', () => {
+
+          const tabName = [btn.dataset.tab](http://btn.dataset.tab);
+
+          document.querySelectorAll('.tabs__btn').forEach(b => {
+
+            b.classList.toggle('tabs__btn--active', [b.dataset.tab](http://b.dataset.tab) === tabName);
+
+          });
+
+          tabCatalog.classList.toggle('tab-content--active', tabName === 'catalog');
+
+          tabMyBookings.classList.toggle('tab-content--active', tabName === 'my-bookings');
+
+          if (tabName === 'my-bookings') updateBookingsUI();
+
+        });
+
+      });
+
+    }
+
+    function renderLoader() {
+
+      scheduleContainer.innerHTML = `<div class="loader"><div class="loader__spinner"></div></div>`;
+
+    }
+
+    function renderSlotCard(slot) {
+
+      return `
+
+        <div class="slot-card" data-slot-id="${[slot.id](http://slot.id)}">
+
+          <img class="slot-card__image" src="${slot.image}" alt="${escapeHtml(slot.title)}"
+
+               onerror="this.onerror=null; [this.style](http://this.style).backgroundColor='#f0f0f0';">
+
+          <div class="slot-card__body">
+
+            <div class="slot-card__header">
+
+              <h3 class="slot-card__title">${escapeHtml(slot.title)}</h3>
+
+              <span class="slot-card__date">${escapeHtml([slot.date](http://slot.date))}</span>
+
+            </div>
+
+            <div class="slot-card__time">🕐 ${escapeHtml(slot.time)}</div>
+
+            <div class="slot-card__location">📍 ${escapeHtml(slot.location)}</div>
+
+          </div>
+
+        </div>
+
+      `;
+
+    }
+
+    function renderSchedule(slots) {
+
+      if (slots.length === 0) {
+
+        scheduleContainer.innerHTML = `<div class="empty-state"><p>Нет доступных мастер-классов</p></div>`;
+
+        return;
+
+      }
+
+      scheduleContainer.innerHTML = [slots.map](http://slots.map)(renderSlotCard).join('');
+
+    }
+
+    function renderModal(slot) {
+
+      modalRoot.innerHTML = `
+
+        <div class="modal-overlay" id="modal-overlay">
+
+          <div class="modal">
+
+            <div class="modal__header">
+
+              <h2 class="modal__title">Запись на мастер-класс</h2>
+
+              <button type="button" class="modal__close" id="modal-close" aria-label="Закрыть">×</button>
+
+            </div>
+
+            <div class="modal__body">
+
+              <div class="modal__info">
+
+                <div class="modal__info-item">
+
+                  <span class="modal__info-label">Мастер-класс:</span>
+
+                  <span class="modal__info-value">${escapeHtml(slot.title)}</span>
+
+                </div>
+
+                <div class="modal__info-item">
+
+                  <span class="modal__info-label">Дата:</span>
+
+                  <span class="modal__info-value">${escapeHtml([slot.date](http://slot.date))} в ${escapeHtml(slot.time)}</span>
+
+                </div>
+
+                <div class="modal__info-item">
+
+                  <span class="modal__info-label">Место:</span>
+
+                  <span class="modal__info-value">${escapeHtml(slot.location)}</span>
+
+                </div>
+
+              </div>
+
+              <div id="message-container"></div>
+
+              <form class="form" id="booking-form">
+
+                <div class="form__group">
+
+                  <label class="form__label form__label--required" for="name">Имя</label>
+
+                  <input type="text" id="name" name="name" class="form__input" minlength="2" autocomplete="name">
+
+                  <div class="form__error" id="name-error"></div>
+
+                </div>
+
+                <div class="form__group">
+
+                  <label class="form__label form__label--required" for="phone">Телефон</label>
+
+                  <input type="tel" id="phone" name="phone" class="form__input"
+
+                         placeholder="+7 (900) 123-45-67" autocomplete="tel">
+
+                  <div class="form__error" id="phone-error"></div>
+
+                </div>
+
+                <div class="form__group">
+
+                  <label class="form__label" for="allergies">Аллергии / диетические ограничения</label>
+
+                  <textarea id="allergies" name="allergies" class="form__textarea"
+
+                            placeholder="Укажите, если есть"></textarea>
+
+                </div>
+
+                <div class="form__group">
+
+                  <label class="form__label">Прокат оборудования</label>
+
+                  <div class="form__checkbox-group">
+
+                    <label class="form__checkbox-label">
+
+                      <input type="checkbox" id="need-apron" name="needApron" class="form__checkbox">
+
+                      <span>Нужен фартук</span>
+
+                    </label>
+
+                    <label class="form__checkbox-label">
+
+                      <input type="checkbox" id="need-knives" name="needKnives" class="form__checkbox">
+
+                      <span>Нужны ножи</span>
+
+                    </label>
+
+                  </div>
+
+                </div>
+
+                <div class="modal__footer">
+
+                  <button type="button" class="btn btn--secondary" id="cancel-btn">Закрыть</button>
+
+                  <button type="button" class="btn btn--primary" id="submit-btn">Записаться</button>
+
+                </div>
+
+              </form>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      `;
+
+      bindModalHandlers();
+
+      const nameInput = document.getElementById('name');
+
+      if (nameInput) nameInput.focus();
+
+    }
+
+    function bindModalHandlers() {
+
+      const modalOverlay = document.getElementById('modal-overlay');
+
+      const modalClose = document.getElementById('modal-close');
+
+      const cancelBtn = document.getElementById('cancel-btn');
+
+      const submitBtn = document.getElementById('submit-btn');
+
+      if (modalOverlay) {
+
+        modalOverlay.addEventListener('click', (e) => {
+
+          if ([e.target](http://e.target) === modalOverlay) closeModal();
+
+        });
+
+      }
+
+      if (modalClose) modalClose.addEventListener('click', closeModal);
+
+      if (cancelBtn) cancelBtn.addEventListener('click', closeModal);
+
+      if (submitBtn) {
+
+        submitBtn.addEventListener('click', onBookingSubmit);
+
+      }
+
+    }
+
+    function onBookingSubmit() {
+
+      if (!selectedSlot) {
+
+        alert('Не выбран мастер-класс');
+
+        return;
+
+      }
+
+      const formData = {
+
+        slotId: [selectedSlot.id](http://selectedSlot.id),
+
+        name: document.getElementById('name').value,
+
+        phone: document.getElementById('phone').value,
+
+        allergies: document.getElementById('allergies').value,
+
+        needApron: document.getElementById('need-apron').checked,
+
+        needKnives: document.getElementById('need-knives').checked
+
+      };
+
+      processBooking(formData);
+
+    }
+
+    function showMessage(message, type) {
+
+      const container = document.getElementById('message-container');
+
+      if (!container) return;
+
+      container.innerHTML = `<div class="message message--${type}">${escapeHtml(message)}</div>`;
+
+    }
+
+    function clearMessages() {
+
+      const container = document.getElementById('message-container');
+
+      if (container) container.innerHTML = '';
+
+    }
+
+    function closeModal() {
+
+      if (!isModalOpen) return;
+
+      modalRoot.innerHTML = '';
+
+      isModalOpen = false;
+
+      selectedSlot = null;
+
+    }
+
+    function setSubmitButtonLoading(isLoading) {
+
+      const submitBtn = document.getElementById('submit-btn');
+
+      if (!submitBtn) return;
+
+      if (isLoading) {
+
+        submitBtn.disabled = true;
+
+        submitBtn.textContent = 'Отправка…';
+
+      } else {
+
+        submitBtn.disabled = false;
+
+        submitBtn.textContent = 'Записаться';
+
+      }
+
+    }
+
+    function validateName(name) {
+
+      if (!name || name.trim().length === 0) return 'Имя обязательно для заполнения';
+
+      if (name.trim().length < 2) return 'Имя должно содержать минимум 2 символа';
+
+      return null;
+
+    }
+
+    function validatePhone(phone) {
+
+      if (!phone || phone.trim().length === 0) return 'Телефон обязателен для заполнения';
+
+      const cleanPhone = phone.replace(/[\s\-\(\)]/g, '');
+
+      if (!/^(\+7|8)\d{10}$/.test(cleanPhone)) {
+
+        return 'Введите корректный номер телефона (+7 или 8, 11 цифр)';
+
+      }
+
+      return null;
+
+    }
+
+    function showValidationErrors(errors) {
+
+      const nameError = document.getElementById('name-error');
+
+      const phoneError = document.getElementById('phone-error');
+
+      const nameInput = document.getElementById('name');
+
+      const phoneInput = document.getElementById('phone');
+
+      if (nameError) nameError.textContent = '';
+
+      if (phoneError) phoneError.textContent = '';
+
+      if (nameInput) nameInput.classList.remove('form__input--error');
+
+      if (phoneInput) phoneInput.classList.remove('form__input--error');
+
+      if ([errors.name](http://errors.name) && nameError && nameInput) {
+
+        nameError.textContent = [errors.name](http://errors.name);
+
+        nameInput.classList.add('form__input--error');
+
+      }
+
+      if ([errors.phone](http://errors.phone) && phoneError && phoneInput) {
+
+        phoneError.textContent = [errors.phone](http://errors.phone);
+
+        phoneInput.classList.add('form__input--error');
+
+      }
+
+    }
+
+    async function processBooking(formData) {
+
+      const errors = {};
+
+      const nameErr = validateName([formData.name](http://formData.name));
+
+      if (nameErr) [errors.name](http://errors.name) = nameErr;
+
+      const phoneErr = validatePhone([formData.phone](http://formData.phone));
+
+      if (phoneErr) [errors.phone](http://errors.phone) = phoneErr;
+
+      if (Object.keys(errors).length > 0) {
+
+        showValidationErrors(errors);
+
+        return;
+
+      }
+
+      showValidationErrors({});
+
+      clearMessages();
+
+      setSubmitButtonLoading(true);
+
+      try {
+
+        const result = await createBooking(formData, false);
+
+        const newBooking = {
+
+          bookingId: [result.data](http://result.data).bookingId,
+
+          slotId: [selectedSlot.id](http://selectedSlot.id),
+
+          title: selectedSlot.title,
+
+          date: [selectedSlot.date](http://selectedSlot.date),
+
+          time: selectedSlot.time,
+
+          location: selectedSlot.location,
+
+          createdAt: new Date().toISOString()
+
+        };
+
+        saveBookingToStorage(newBooking);
+
+        showMessage(
+
+          `✅ Вы успешно записаны на мастер-класс! Ваш номер брони: ${result.data.bookingId}`,
+
+          'success'
+
+        );
+
+        setTimeout(() => {
+
+          closeModal();
+
+        }, 2500);
+
+      } catch (error) {
+
+        if (error.status === 409) {
+
+          showMessage(error.message || 'Вы уже записаны на это занятие', 'error');
+
+        } else if (error.status === 410) {
+
+          showMessage(error.message || 'Место на мастер-классе закончилось', 'error');
+
+        } else {
+
+          showMessage(error.message || 'Произошла ошибка. Попробуйте позже.', 'error');
+
+        }
+
+        setSubmitButtonLoading(false);
+
+      }
+
+    }
+
+    function handleSlotCardClick(event) {
+
+      const card = [event.target](http://event.target).closest('.slot-card');
+
+      if (!card) return;
+
+      const slotId = card.dataset.slotId;
+
+      const slot = currentSlots.find(s => [s.id](http://s.id) === slotId);
+
+      if (!slot || isModalOpen) return;
+
+      selectedSlot = slot;
+
+      isModalOpen = true;
+
+      renderModal(slot);
+
+    }
+
+    async function loadSchedule() {
+
+      renderLoader();
+
+      try {
+
+        currentSlots = await getSlots();
+
+        renderSchedule(currentSlots);
+
+      } catch (error) {
+
+        scheduleContainer.innerHTML = `<div class="empty-state"><p>Ошибка загрузки расписания</p></div>`;
+
+      }
+
+    }
+
+    function init() {
+
+      loadSchedule();
+
+      scheduleContainer.addEventListener('click', handleSlotCardClick);
+
+      initTabs();
+
+      updateBookingsUI();
+
+    }
+
+    document.addEventListener('DOMContentLoaded', init);
+
+  </script>
+
+</body>
+
+</html>
+

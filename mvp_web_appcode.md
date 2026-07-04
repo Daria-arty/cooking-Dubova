@@ -1,0 +1,1935 @@
+
+
+                        <!DOCTYPE html>
+
+                        <html lang="en">
+
+                        <head>
+
+                            <meta charset="UTF-8">
+
+                            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+              <style>
+
+                body {
+
+                  background-color: white; /* Ensure the iframe has a white background */
+
+                }
+
+                /* Reset and base styles */
+
+* {
+
+  margin: 0;
+
+  padding: 0;
+
+  box-sizing: border-box;
+
+}
+
+:root {
+
+  --color-primary: #2563eb;
+
+  --color-primary-hover: #1d4ed8;
+
+  --color-success: #10b981;
+
+  --color-error: #ef4444;
+
+  --color-warning: #f59e0b;
+
+  --color-text: #1f2937;
+
+  --color-text-light: #6b7280;
+
+  --color-bg: #f9fafb;
+
+  --color-card: #ffffff;
+
+  --color-border: #e5e7eb;
+
+  --spacing-xs: 0.5rem;
+
+  --spacing-sm: 1rem;
+
+  --spacing-md: 1.5rem;
+
+  --spacing-lg: 2rem;
+
+  --font-size-sm: 0.875rem;
+
+  --font-size-base: 1rem;
+
+  --font-size-lg: 1.125rem;
+
+  --font-size-xl: 1.5rem;
+
+  --border-radius: 0.5rem;
+
+  --min-tap-size: 44px;
+
+}
+
+body {
+
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+
+  font-size: var(--font-size-base);
+
+  line-height: 1.5;
+
+  color: var(--color-text);
+
+  background-color: var(--color-bg);
+
+  min-height: 100vh;
+
+}
+
+/* Header */
+
+.header {
+
+  background-color: var(--color-card);
+
+  border-bottom: 1px solid var(--color-border);
+
+  padding: var(--spacing-md);
+
+  position: sticky;
+
+  top: 0;
+
+  z-index: 10;
+
+}
+
+.header__title {
+
+  font-size: var(--font-size-xl);
+
+  font-weight: 600;
+
+  text-align: center;
+
+}
+
+/* Main content */
+
+.main {
+
+  padding: var(--spacing-md);
+
+  max-width: 600px;
+
+  margin: 0 auto;
+
+}
+
+.schedule__title {
+
+  font-size: var(--font-size-lg);
+
+  font-weight: 600;
+
+  margin-bottom: var(--spacing-md);
+
+}
+
+/* Schedule container */
+
+.schedule__container {
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: var(--spacing-sm);
+
+}
+
+/* Loading indicator */
+
+.loader {
+
+  display: flex;
+
+  justify-content: center;
+
+  align-items: center;
+
+  padding: var(--spacing-lg);
+
+}
+
+.loader__spinner {
+
+  width: 40px;
+
+  height: 40px;
+
+  border: 4px solid var(--color-border);
+
+  border-top-color: var(--color-primary);
+
+  border-radius: 50%;
+
+  animation: spin 1s linear infinite;
+
+}
+
+@keyframes spin {
+
+  to {
+
+    transform: rotate(360deg);
+
+  }
+
+}
+
+/* Empty state */
+
+.empty-state {
+
+  text-align: center;
+
+  padding: var(--spacing-lg);
+
+  color: var(--color-text-light);
+
+}
+
+/* Slot card */
+
+.slot-card {
+
+  background-color: var(--color-card);
+
+  border: 1px solid var(--color-border);
+
+  border-radius: var(--border-radius);
+
+  padding: var(--spacing-md);
+
+  cursor: pointer;
+
+  transition: box-shadow 0.2s, transform 0.2s;
+
+  min-height: var(--min-tap-size);
+
+}
+
+.slot-card:hover {
+
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+
+  transform: translateY(-2px);
+
+}
+
+.slot-card:active {
+
+  transform: translateY(0);
+
+}
+
+.slot-card__header {
+
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: flex-start;
+
+  margin-bottom: var(--spacing-xs);
+
+}
+
+.slot-card__title {
+
+  font-size: var(--font-size-lg);
+
+  font-weight: 600;
+
+  color: var(--color-text);
+
+  flex: 1;
+
+}
+
+.slot-card__date {
+
+  font-size: var(--font-size-sm);
+
+  color: var(--color-primary);
+
+  font-weight: 500;
+
+  white-space: nowrap;
+
+  margin-left: var(--spacing-sm);
+
+}
+
+.slot-card__time {
+
+  font-size: var(--font-size-base);
+
+  color: var(--color-text);
+
+  margin-bottom: var(--spacing-xs);
+
+}
+
+.slot-card__location {
+
+  font-size: var(--font-size-sm);
+
+  color: var(--color-text-light);
+
+}
+
+/* Modal */
+
+.modal-overlay {
+
+  position: fixed;
+
+  top: 0;
+
+  left: 0;
+
+  right: 0;
+
+  bottom: 0;
+
+  background-color: rgba(0, 0, 0, 0.5);
+
+  display: flex;
+
+  justify-content: center;
+
+  align-items: center;
+
+  z-index: 100;
+
+  padding: var(--spacing-md);
+
+  animation: fadeIn 0.2s;
+
+}
+
+@keyframes fadeIn {
+
+  from {
+
+    opacity: 0;
+
+  }
+
+  to {
+
+    opacity: 1;
+
+  }
+
+}
+
+.modal {
+
+  background-color: var(--color-card);
+
+  border-radius: var(--border-radius);
+
+  max-width: 500px;
+
+  width: 100%;
+
+  max-height: 90vh;
+
+  overflow-y: auto;
+
+  position: relative;
+
+  animation: slideUp 0.3s;
+
+}
+
+@keyframes slideUp {
+
+  from {
+
+    transform: translateY(20px);
+
+    opacity: 0;
+
+  }
+
+  to {
+
+    transform: translateY(0);
+
+    opacity: 1;
+
+  }
+
+}
+
+.modal__header {
+
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  padding: var(--spacing-md);
+
+  border-bottom: 1px solid var(--color-border);
+
+}
+
+.modal__title {
+
+  font-size: var(--font-size-lg);
+
+  font-weight: 600;
+
+}
+
+.modal__close {
+
+  background: none;
+
+  border: none;
+
+  font-size: 1.5rem;
+
+  cursor: pointer;
+
+  color: var(--color-text-light);
+
+  width: var(--min-tap-size);
+
+  height: var(--min-tap-size);
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  border-radius: var(--border-radius);
+
+  transition: background-color 0.2s;
+
+}
+
+.modal__close:hover {
+
+  background-color: var(--color-bg);
+
+}
+
+.modal__body {
+
+  padding: var(--spacing-md);
+
+}
+
+.modal__info {
+
+  background-color: var(--color-bg);
+
+  padding: var(--spacing-sm);
+
+  border-radius: var(--border-radius);
+
+  margin-bottom: var(--spacing-md);
+
+}
+
+.modal__info-item {
+
+  display: flex;
+
+  justify-content: space-between;
+
+  margin-bottom: var(--spacing-xs);
+
+}
+
+.modal__info-item:last-child {
+
+  margin-bottom: 0;
+
+}
+
+.modal__info-label {
+
+  font-weight: 500;
+
+  color: var(--color-text-light);
+
+}
+
+.modal__info-value {
+
+  color: var(--color-text);
+
+}
+
+/* Form */
+
+.form {
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: var(--spacing-md);
+
+}
+
+.form__group {
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: var(--spacing-xs);
+
+}
+
+.form__label {
+
+  font-weight: 500;
+
+  color: var(--color-text);
+
+}
+
+.form__label--required::after {
+
+  content: ' *';
+
+  color: var(--color-error);
+
+}
+
+.form__input {
+
+  padding: var(--spacing-sm);
+
+  border: 1px solid var(--color-border);
+
+  border-radius: var(--border-radius);
+
+  font-size: var(--font-size-base);
+
+  min-height: var(--min-tap-size);
+
+  transition: border-color 0.2s;
+
+}
+
+.form__input:focus {
+
+  outline: none;
+
+  border-color: var(--color-primary);
+
+}
+
+.form__input--error {
+
+  border-color: var(--color-error);
+
+}
+
+.form__textarea {
+
+  padding: var(--spacing-sm);
+
+  border: 1px solid var(--color-border);
+
+  border-radius: var(--border-radius);
+
+  font-size: var(--font-size-base);
+
+  min-height: 80px;
+
+  resize: vertical;
+
+  font-family: inherit;
+
+}
+
+.form__textarea:focus {
+
+  outline: none;
+
+  border-color: var(--color-primary);
+
+}
+
+.form__checkbox-group {
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: var(--spacing-xs);
+
+}
+
+.form__checkbox-label {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: var(--spacing-xs);
+
+  cursor: pointer;
+
+  min-height: var(--min-tap-size);
+
+}
+
+.form__checkbox {
+
+  width: 20px;
+
+  height: 20px;
+
+  cursor: pointer;
+
+}
+
+.form__error {
+
+  color: var(--color-error);
+
+  font-size: var(--font-size-sm);
+
+  margin-top: var(--spacing-xs);
+
+}
+
+/* Buttons */
+
+.btn {
+
+  padding: var(--spacing-sm) var(--spacing-md);
+
+  border: none;
+
+  border-radius: var(--border-radius);
+
+  font-size: var(--font-size-base);
+
+  font-weight: 500;
+
+  cursor: pointer;
+
+  min-height: var(--min-tap-size);
+
+  transition: background-color 0.2s, opacity 0.2s;
+
+}
+
+.btn--primary {
+
+  background-color: var(--color-primary);
+
+  color: white;
+
+}
+
+.btn--primary:hover:not(:disabled) {
+
+  background-color: var(--color-primary-hover);
+
+}
+
+.btn--primary:disabled {
+
+  opacity: 0.6;
+
+  cursor: not-allowed;
+
+}
+
+.btn--secondary {
+
+  background-color: var(--color-border);
+
+  color: var(--color-text);
+
+}
+
+.btn--secondary:hover {
+
+  background-color: #d1d5db;
+
+}
+
+.modal__footer {
+
+  display: flex;
+
+  gap: var(--spacing-sm);
+
+  padding: var(--spacing-md);
+
+  border-top: 1px solid var(--color-border);
+
+}
+
+.modal__footer .btn {
+
+  flex: 1;
+
+}
+
+/* Messages */
+
+.message {
+
+  padding: var(--spacing-sm);
+
+  border-radius: var(--border-radius);
+
+  margin-bottom: var(--spacing-md);
+
+}
+
+.message--success {
+
+  background-color: #d1fae5;
+
+  color: #065f46;
+
+  border: 1px solid #10b981;
+
+}
+
+.message--error {
+
+  background-color: #fee2e2;
+
+  color: #991b1b;
+
+  border: 1px solid #ef4444;
+
+}
+
+/* Responsive */
+
+@media (max-width: 480px) {
+
+  .main {
+
+    padding: var(--spacing-sm);
+
+  }
+
+  .modal {
+
+    max-height: 95vh;
+
+  }
+
+  .modal__footer {
+
+    flex-direction: column;
+
+  }
+
+}
+
+              </style>
+
+                        </head>
+
+                        <body>
+
+                            <!DOCTYPE html>
+
+<html lang="ru">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Кулинарная студия — Расписание</title>
+
+  <link rel="stylesheet" href="src/styles.css">
+
+</head>
+
+<body>
+
+  <div id="app">
+
+    <header class="header">
+
+      <h1 class="header__title">Кулинарная студия</h1>
+
+    </header>
+
+    <main class="main">
+
+      <section class="schedule">
+
+        <h2 class="schedule__title">Расписание мастер-классов</h2>
+
+        <div id="schedule-container" class="schedule__container"></div>
+
+      </section>
+
+    </main>
+
+  </div>
+
+  <div id="modal-root"></div>
+
+  <script type="module" src="src/app.js"></script>
+
+</body>
+
+</html>
+
+              <script>
+
+                              // src/mockData.js
+
+export const mockSlots = [
+
+  {
+
+    id: 'slot-001',
+
+    date: '15.07.2026',
+
+    time: '18:00',
+
+    title: 'Итальянская кухня для новичков',
+
+    location: 'Москва, ул. Тверская, 15'
+
+  },
+
+  {
+
+    id: 'slot-002',
+
+    date: '17.07.2026',
+
+    time: '19:00',
+
+    title: 'Азиатская кухня: суши и роллы',
+
+    location: 'Москва, ул. Арбат, 22'
+
+  },
+
+  {
+
+    id: 'slot-003',
+
+    date: '20.07.2026',
+
+    time: '17:00',
+
+    title: 'Французские десерты',
+
+    location: 'Москва, Ленинский пр-т, 8'
+
+  },
+
+  {
+
+    id: 'slot-004',
+
+    date: '22.07.2026',
+
+    time: '18:30',
+
+    title: 'Грузинская кухня: хинкали и хачапури',
+
+    location: 'Москва, ул. Покровка, 5'
+
+  },
+
+  {
+
+    id: 'slot-005',
+
+    date: '25.07.2026',
+
+    time: '16:00',
+
+    title: 'Здоровое питание: вегетарианские блюда',
+
+    location: 'Москва, ул. Мясницкая, 30'
+
+  }
+
+];
+
+// src/api.js
+
+import { mockSlots } from './mockData.js';
+
+/**
+
+ * Получить список доступных слотов
+
+ * @returns {Promise<Array>} Массив слотов
+
+ */
+
+export function getSlots() {
+
+  return new Promise((resolve) => {
+
+    setTimeout(() => {
+
+      resolve(mockSlots);
+
+    }, 800);
+
+  });
+
+}
+
+/**
+
+ * Создать бронирование
+
+ * @param {Object} formData - Данные формы
+
+ * @param {string} formData.slotId - ID слота
+
+ * @param {string} [formData.name](http://formData.name) - Имя клиента
+
+ * @param {string} [formData.phone](http://formData.phone) - Телефон клиента
+
+ * @param {string} formData.allergies - Аллергии (опционально)
+
+ * @param {boolean} formData.needApron - Нужен фартук
+
+ * @param {boolean} formData.needKnives - Нужны ножи
+
+ * @param {boolean} simulateNetworkError - Эмуляция сетевой ошибки
+
+ * @returns {Promise<Object>} Результат бронирования
+
+ */
+
+export function createBooking(formData, simulateNetworkError = false) {
+
+  return new Promise((resolve, reject) => {
+
+    setTimeout(() => {
+
+      // Эмуляция сетевой ошибки
+
+      if (simulateNetworkError) {
+
+        reject(new Error('Ошибка сети. Проверьте подключение к интернету.'));
+
+        return;
+
+      }
+
+      // Эмуляция ошибки 409 - клиент уже записан
+
+      if ([formData.name](http://formData.name) === 'Тест 409') {
+
+        reject({ status: 409, message: 'Вы уже записаны на это занятие' });
+
+        return;
+
+      }
+
+      // Эмуляция ошибки 410 - место закончилось
+
+      if ([formData.name](http://formData.name) === 'Тест 410') {
+
+        reject({ status: 410, message: 'Место на мастер-классе закончилось' });
+
+        return;
+
+      }
+
+      // Успешное бронирование
+
+      const bookingId = 'BKK-' + Math.floor(1000 + Math.random() * 9000);
+
+      resolve({
+
+        status: 201,
+
+        data: { bookingId }
+
+      });
+
+    }, 1000);
+
+  });
+
+}
+
+// src/app.js
+
+import { getSlots, createBooking } from './api.js';
+
+// State
+
+let currentSlots = [];
+
+let isModalOpen = false;
+
+let selectedSlot = null;
+
+// DOM Elements
+
+const scheduleContainer = document.getElementById('schedule-container');
+
+const modalRoot = document.getElementById('modal-root');
+
+// ==================== UI Components ====================
+
+/**
+
+ * Отрисовать индикатор загрузки
+
+ */
+
+function renderLoader() {
+
+  scheduleContainer.innerHTML = `
+
+    <div class="loader">
+
+      <div class="loader__spinner"></div>
+
+    </div>
+
+  `;
+
+}
+
+/**
+
+ * Отрисовать пустое состояние
+
+ */
+
+function renderEmptyState() {
+
+  scheduleContainer.innerHTML = `
+
+    <div class="empty-state">
+
+      <p>Нет доступных мастер-классов</p>
+
+    </div>
+
+  `;
+
+}
+
+/**
+
+ * Отрисовать карточку слота
+
+ * @param {Object} slot - Данные слота
+
+ * @returns {string} HTML карточки
+
+ */
+
+function renderSlotCard(slot) {
+
+  return `
+
+    <div class="slot-card" data-slot-id="${[slot.id](http://slot.id)}">
+
+      <div class="slot-card__header">
+
+        <h3 class="slot-card__title">${slot.title}</h3>
+
+        <span class="slot-card__date">${[slot.date](http://slot.date)}</span>
+
+      </div>
+
+      <div class="slot-card__time">🕐 ${slot.time}</div>
+
+      <div class="slot-card__location">📍 ${slot.location}</div>
+
+    </div>
+
+  `;
+
+}
+
+/**
+
+ * Отрисовать список слотов
+
+ * @param {Array} slots - Массив слотов
+
+ */
+
+function renderSchedule(slots) {
+
+  if (slots.length === 0) {
+
+    renderEmptyState();
+
+    return;
+
+  }
+
+  scheduleContainer.innerHTML = [slots.map](http://slots.map)(renderSlotCard).join('');
+
+}
+
+/**
+
+ * Отрисовать модальное окно
+
+ * @param {Object} slot - Данные выбранного слота
+
+ */
+
+function renderModal(slot) {
+
+  const modalHTML = `
+
+    <div class="modal-overlay" id="modal-overlay">
+
+      <div class="modal" id="modal">
+
+        <div class="modal__header">
+
+          <h2 class="modal__title">Запись на мастер-класс</h2>
+
+          <button class="modal__close" id="modal-close" aria-label="Закрыть">×</button>
+
+        </div>
+
+        <div class="modal__body">
+
+          <div class="modal__info">
+
+            <div class="modal__info-item">
+
+              <span class="modal__info-label">Мастер-класс:</span>
+
+              <span class="modal__info-value">${slot.title}</span>
+
+            </div>
+
+            <div class="modal__info-item">
+
+              <span class="modal__info-label">Дата:</span>
+
+              <span class="modal__info-value">${[slot.date](http://slot.date)} в ${slot.time}</span>
+
+            </div>
+
+            <div class="modal__info-item">
+
+              <span class="modal__info-label">Место:</span>
+
+              <span class="modal__info-value">${slot.location}</span>
+
+            </div>
+
+          </div>
+
+          
+
+          <div id="message-container"></div>
+
+          
+
+          <form class="form" id="booking-form">
+
+            <div class="form__group">
+
+              <label class="form__label form__label--required" for="name">Имя</label>
+
+              <input 
+
+                type="text" 
+
+                id="name" 
+
+                name="name" 
+
+                class="form__input" 
+
+                required
+
+                minlength="2"
+
+                autocomplete="name"
+
+              >
+
+              <div class="form__error" id="name-error"></div>
+
+            </div>
+
+            
+
+            <div class="form__group">
+
+              <label class="form__label form__label--required" for="phone">Телефон</label>
+
+              <input 
+
+                type="tel" 
+
+                id="phone" 
+
+                name="phone" 
+
+                class="form__input" 
+
+                required
+
+                placeholder="+7 (900) 123-45-67"
+
+                autocomplete="tel"
+
+              >
+
+              <div class="form__error" id="phone-error"></div>
+
+            </div>
+
+            
+
+            <div class="form__group">
+
+              <label class="form__label" for="allergies">Аллергии / диетические ограничения</label>
+
+              <textarea 
+
+                id="allergies" 
+
+                name="allergies" 
+
+                class="form__textarea"
+
+                placeholder="Укажите, если есть"
+
+              ></textarea>
+
+            </div>
+
+            
+
+            <div class="form__group">
+
+              <label class="form__label">Прокат оборудования</label>
+
+              <div class="form__checkbox-group">
+
+                <label class="form__checkbox-label">
+
+                  <input 
+
+                    type="checkbox" 
+
+                    id="need-apron" 
+
+                    name="needApron" 
+
+                    class="form__checkbox"
+
+                  >
+
+                  <span>Нужен фартук</span>
+
+                </label>
+
+                <label class="form__checkbox-label">
+
+                  <input 
+
+                    type="checkbox" 
+
+                    id="need-knives" 
+
+                    name="needKnives" 
+
+                    class="form__checkbox"
+
+                  >
+
+                  <span>Нужны ножи</span>
+
+                </label>
+
+              </div>
+
+            </div>
+
+            
+
+            <div class="modal__footer">
+
+              <button type="button" class="btn btn--secondary" id="cancel-btn">Закрыть</button>
+
+              <button type="submit" class="btn btn--primary" id="submit-btn">Записаться</button>
+
+            </div>
+
+          </form>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  `;
+
+  modalRoot.innerHTML = modalHTML;
+
+  
+
+  // Установить фокус на поле имени
+
+  setTimeout(() => {
+
+    const nameInput = document.getElementById('name');
+
+    if (nameInput) {
+
+      nameInput.focus();
+
+    }
+
+  }, 100);
+
+}
+
+/**
+
+ * Показать сообщение
+
+ * @param {string} message - Текст сообщения
+
+ * @param {string} type - Тип сообщения ('success' | 'error')
+
+ */
+
+function showMessage(message, type) {
+
+  const container = document.getElementById('message-container');
+
+  if (!container) return;
+
+  const messageHTML = `
+
+    <div class="message message--${type}">
+
+      ${message}
+
+    </div>
+
+  `;
+
+  
+
+  container.innerHTML = messageHTML;
+
+}
+
+/**
+
+ * Очистить сообщения
+
+ */
+
+function clearMessages() {
+
+  const container = document.getElementById('message-container');
+
+  if (container) {
+
+    container.innerHTML = '';
+
+  }
+
+}
+
+/**
+
+ * Закрыть модальное окно
+
+ */
+
+function closeModal() {
+
+  if (!isModalOpen) return;
+
+  
+
+  modalRoot.innerHTML = '';
+
+  isModalOpen = false;
+
+  selectedSlot = null;
+
+}
+
+/**
+
+ * Обновить состояние кнопки отправки
+
+ * @param {boolean} isLoading - Состояние загрузки
+
+ */
+
+function setSubmitButtonLoading(isLoading) {
+
+  const submitBtn = document.getElementById('submit-btn');
+
+  if (!submitBtn) return;
+
+  if (isLoading) {
+
+    submitBtn.disabled = true;
+
+    submitBtn.textContent = 'Отправка…';
+
+  } else {
+
+    submitBtn.disabled = false;
+
+    submitBtn.textContent = 'Записаться';
+
+  }
+
+}
+
+// ==================== Services ====================
+
+/**
+
+ * Валидация имени
+
+ * @param {string} name - Имя для валидации
+
+ * @returns {string|null} Сообщение об ошибке или null
+
+ */
+
+function validateName(name) {
+
+  if (!name || name.trim().length === 0) {
+
+    return 'Имя обязательно для заполнения';
+
+  }
+
+  if (name.trim().length < 2) {
+
+    return 'Имя должно содержать минимум 2 символа';
+
+  }
+
+  return null;
+
+}
+
+/**
+
+ * Валидация телефона
+
+ * @param {string} phone - Телефон для валидации
+
+ * @returns {string|null} Сообщение об ошибке или null
+
+ */
+
+function validatePhone(phone) {
+
+  if (!phone || phone.trim().length === 0) {
+
+    return 'Телефон обязателен для заполнения';
+
+  }
+
+  
+
+  // Удаляем пробелы, скобки, дефисы
+
+  const cleanPhone = phone.replace(/[\s\-\(\)]/g, '');
+
+  
+
+  // Проверяем формат: +7 или 8, только цифры и плюс
+
+  const phoneRegex = /^(\+7|8)\d{10}$/;
+
+  
+
+  if (!phoneRegex.test(cleanPhone)) {
+
+    return 'Введите корректный номер телефона (+7 или 8, 11 цифр)';
+
+  }
+
+  
+
+  return null;
+
+}
+
+/**
+
+ * Валидация формы
+
+ * @param {Object} formData - Данные формы
+
+ * @returns {Object} Результат валидации { isValid, errors }
+
+ */
+
+function validateForm(formData) {
+
+  const errors = {};
+
+  
+
+  const nameError = validateName([formData.name](http://formData.name));
+
+  if (nameError) {
+
+    [errors.name](http://errors.name) = nameError;
+
+  }
+
+  
+
+  const phoneError = validatePhone([formData.phone](http://formData.phone));
+
+  if (phoneError) {
+
+    [errors.phone](http://errors.phone) = phoneError;
+
+  }
+
+  
+
+  return {
+
+    isValid: Object.keys(errors).length === 0,
+
+    errors
+
+  };
+
+}
+
+/**
+
+ * Показать ошибки валидации
+
+ * @param {Object} errors - Объект с ошибками { fieldName: errorMessage }
+
+ */
+
+function showValidationErrors(errors) {
+
+  // Очищаем все ошибки
+
+  const nameError = document.getElementById('name-error');
+
+  const phoneError = document.getElementById('phone-error');
+
+  const nameInput = document.getElementById('name');
+
+  const phoneInput = document.getElementById('phone');
+
+  
+
+  if (nameError) nameError.textContent = '';
+
+  if (phoneError) phoneError.textContent = '';
+
+  if (nameInput) nameInput.classList.remove('form__input--error');
+
+  if (phoneInput) phoneInput.classList.remove('form__input--error');
+
+  
+
+  // Показываем новые ошибки
+
+  if ([errors.name](http://errors.name) && nameError && nameInput) {
+
+    nameError.textContent = [errors.name](http://errors.name);
+
+    nameInput.classList.add('form__input--error');
+
+  }
+
+  
+
+  if ([errors.phone](http://errors.phone) && phoneError && phoneInput) {
+
+    phoneError.textContent = [errors.phone](http://errors.phone);
+
+    phoneInput.classList.add('form__input--error');
+
+  }
+
+}
+
+/**
+
+ * Обработать отправку формы
+
+ * @param {Object} formData - Данные формы
+
+ */
+
+async function handleFormSubmit(formData) {
+
+  // Валидация
+
+  const validation = validateForm(formData);
+
+  if (!validation.isValid) {
+
+    showValidationErrors(validation.errors);
+
+    return;
+
+  }
+
+  
+
+  // Очищаем ошибки и сообщения
+
+  showValidationErrors({});
+
+  clearMessages();
+
+  
+
+  // Блокируем кнопку
+
+  setSubmitButtonLoading(true);
+
+  
+
+  try {
+
+    const result = await createBooking(formData, false);
+
+    
+
+    // Успех
+
+    showMessage(
+
+      `Вы успешно записаны на мастер-класс! Ваш номер брони: ${result.data.bookingId}`,
+
+      'success'
+
+    );
+
+    
+
+    // Закрываем модальное окно через 2 секунды
+
+    setTimeout(() => {
+
+      closeModal();
+
+    }, 2000);
+
+    
+
+  } catch (error) {
+
+    // Обработка ошибок
+
+    if (error.status === 409) {
+
+      showMessage(error.message || 'Вы уже записаны на это занятие', 'error');
+
+    } else if (error.status === 410) {
+
+      showMessage(error.message || 'Место на мастер-классе закончилось', 'error');
+
+    } else {
+
+      // Сетевая ошибка или другая
+
+      showMessage(error.message || 'Произошла ошибка. Попробуйте позже.', 'error');
+
+    }
+
+    
+
+    // Разблокируем кнопку
+
+    setSubmitButtonLoading(false);
+
+  }
+
+}
+
+// ==================== Event Handlers ====================
+
+/**
+
+ * Обработчик клика на карточку слота
+
+ * @param {Event} event - Событие клика
+
+ */
+
+function handleSlotCardClick(event) {
+
+  const card = [event.target](http://event.target).closest('.slot-card');
+
+  if (!card) return;
+
+  
+
+  const slotId = card.dataset.slotId;
+
+  const slot = currentSlots.find(s => [s.id](http://s.id) === slotId);
+
+  
+
+  if (!slot) return;
+
+  
+
+  // Не открываем модальное окно повторно
+
+  if (isModalOpen) return;
+
+  
+
+  selectedSlot = slot;
+
+  isModalOpen = true;
+
+  renderModal(slot);
+
+}
+
+/**
+
+ * Обработчик клика на overlay модального окна
+
+ * @param {Event} event - Событие клика
+
+ */
+
+function handleModalOverlayClick(event) {
+
+  if ([event.target.id](http://event.target.id) === 'modal-overlay') {
+
+    closeModal();
+
+  }
+
+}
+
+/**
+
+ * Обработчик отправки формы
+
+ * @param {Event} event - Событие отправки формы
+
+ */
+
+function handleFormSubmitEvent(event) {
+
+  event.preventDefault();
+
+  
+
+  const formData = {
+
+    slotId: [selectedSlot.id](http://selectedSlot.id),
+
+    name: document.getElementById('name').value,
+
+    phone: document.getElementById('phone').value,
+
+    allergies: document.getElementById('allergies').value,
+
+    needApron: document.getElementById('need-apron').checked,
+
+    needKnives: document.getElementById('need-knives').checked
+
+  };
+
+  
+
+  handleFormSubmit(formData);
+
+}
+
+/**
+
+ * Инициализировать обработчики событий модального окна
+
+ */
+
+function initModalEventListeners() {
+
+  const modalOverlay = document.getElementById('modal-overlay');
+
+  const modalClose = document.getElementById('modal-close');
+
+  const cancelBtn = document.getElementById('cancel-btn');
+
+  const bookingForm = document.getElementById('booking-form');
+
+  
+
+  if (modalOverlay) {
+
+    modalOverlay.addEventListener('click', handleModalOverlayClick);
+
+  }
+
+  
+
+  if (modalClose) {
+
+    modalClose.addEventListener('click', closeModal);
+
+  }
+
+  
+
+  if (cancelBtn) {
+
+    cancelBtn.addEventListener('click', closeModal);
+
+  }
+
+  
+
+  if (bookingForm) {
+
+    bookingForm.addEventListener('submit', handleFormSubmitEvent);
+
+  }
+
+}
+
+// ==================== Main ====================
+
+/**
+
+ * Загрузить и отобразить расписание
+
+ */
+
+async function loadSchedule() {
+
+  renderLoader();
+
+  
+
+  try {
+
+    currentSlots = await getSlots();
+
+    renderSchedule(currentSlots);
+
+  } catch (error) {
+
+    console.error('Ошибка загрузки расписания:', error);
+
+    scheduleContainer.innerHTML = `
+
+      <div class="empty-state">
+
+        <p>Ошибка загрузки расписания. Попробуйте позже.</p>
+
+      </div>
+
+    `;
+
+  }
+
+}
+
+/**
+
+ * Инициализировать приложение
+
+ */
+
+function init() {
+
+  // Загружаем расписание
+
+  loadSchedule();
+
+  
+
+  // Делегирование событий для карточек слотов
+
+  scheduleContainer.addEventListener('click', handleSlotCardClick);
+
+  
+
+  // Используем MutationObserver для инициализации обработчиков модального окна
+
+  const observer = new MutationObserver(() => {
+
+    if (modalRoot.innerHTML) {
+
+      initModalEventListeners();
+
+    }
+
+  });
+
+  
+
+  observer.observe(modalRoot, { childList: true });
+
+}
+
+// Запуск приложения
+
+document.addEventListener('DOMContentLoaded', init);
+
+              </script>
+
+                        </body>
+
+                        </html>
+
+                    
